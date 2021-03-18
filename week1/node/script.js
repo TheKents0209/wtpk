@@ -1,0 +1,1 @@
+console.log('Tää on Javascriptiä');
