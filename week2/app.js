@@ -4,6 +4,8 @@ const app = express();
 const cors = require('cors');
 const port = 3000;
 
+require('dotenv').config()
+
 app.use(cors());
 
 app.use(express.static('week2_public_html'));

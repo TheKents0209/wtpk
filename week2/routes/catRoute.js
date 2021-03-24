@@ -1,23 +1,19 @@
-// Router
-'use strict';
 const express = require('express');
 const router = express.Router();
 const catController = require('../controllers/catController');
 
-router.get('/', catController.cat_list_get);
+router.route('/').
+    get(catController.cat_list_get).
+    post(catController.cat_post_new_cat);
 
-router.get('/:id', catController.cat_get);
-
-router.post('/cat', (req, res) => {
-  res.send('From this endpoint you can post cats.')
-});
-
-router.put('/cat', (req, res) => {
-  res.send('From this endpoint you can put cats.')
-});
-
-router.delete('/cat', (req, res) => {
-  res.send('From this endpoint you can delete cats.')
-});
+router.route('/:id').
+    get(catController.cat_get_by_id).
+    put((req, res) => {
+      console.log('put cat', req.params);
+      res.send('put cat');
+    }).delete((req, res) => {
+      console.log('delete cat', req.params);
+      res.send('delete cat');
+    });
 
 module.exports = router;
