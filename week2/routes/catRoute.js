@@ -11,9 +11,10 @@ router.route('/:id').
     put((req, res) => {
       console.log('put cat', req.params);
       res.send('put cat');
-    }).delete((req, res) => {
+    })
+    .delete((req, res) => {
       console.log('delete cat', req.params);
       res.send('delete cat');
-    });
+     });
 
 module.exports = router;

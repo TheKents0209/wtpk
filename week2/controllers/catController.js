@@ -1,28 +1,35 @@
 // Controller
 'use strict';
+
 const catModel = require('../models/catModel');
 
 const cats = catModel.cats;
 
-
 const cat_list_get = async (req, res) => {
+  if(req.query.sort === 'age') {
+    const catsSort = await catModel.getAllCatsSort('age');
+    res.json(catsSort);
+    return;
+  } else if (req.query.sort === 'name') {
+    const catsSort = await catModel.getAllCatsSort('name');
+    res.json(catsSort);
+    return;
+  }
   const cats = await catModel.getAllCats();
   res.json(cats);
 };
 
 const cat_get_by_id = (req, res) => {
-  cats.forEach(cat => {
-    if(cat.id === req.params.id) {
-      res.json(cat)
-      return
-    }
-  })
-  res.send('No cat found with id: ' + req.params.id)
+  res.json(cats.find(cat => cat.id === req.params.id));
 };
 
-const cat_post_new_cat = (req, res) => {
+const cat_post_new_cat = async (req, res) => {
   console.log('post cat', req.body);
-  res.send(`post cat: ${req.body.name}`);
+  const cat = req.body;
+  const catid = await catModel.insertCat(cat);
+  cat.id = catid;
+  // res.send(`post cat: ${req.body.name}`);
+  res.json(cat);
 };
 
 module.exports = {
