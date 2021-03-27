@@ -9,9 +9,10 @@ router.route('/').
     get(catController.cat_list_get).
     post(upload.single('catpic'), function(req, res) {
       console.log(req.file, req.body);
+      console.log('cat file inside route:', req.file)
       catController.cat_post_new_cat(req,res)
-    });
-    //post(catController.cat_post_new_cat);
+    }).
+    put(catController.cat_update_put);
 
 router.route('/:id').
     get(catController.cat_get_by_id).

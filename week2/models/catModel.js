@@ -1,4 +1,3 @@
-// Model (usually gets data from database, in this case data is hard coded)
 'use strict';
 
 const pool = require('../database/db');
@@ -25,8 +24,8 @@ const getAllCatsSort = async (order) => {
   }
 };
 
-const insertCat = async (cat) => {
-  const [row] = await promisePool.execute('INSERT INTO wop_cat (name, age, weight, owner, filename) VALUES (?, ?, ?, ?, \'foo.jpg\')', [cat.name, cat.age, cat.weight, cat.owner]);
+const insertCat = async (cat,picture) => {
+  const [row] = await promisePool.execute('INSERT INTO wop_cat (name, age, weight, owner, filename) VALUES (?, ?, ?, ?, ?)', [cat.name, cat.age, cat.weight, cat.owner, picture]);
   console.log('insert row', row);
   return row.insertId;
 };
@@ -40,9 +39,26 @@ const getCatById = async (id) => {
   }
 };
 
+const updateCat = async (cat, catid) => {
+  try{
+    const [row] = await promisePool.query(`SELECT * FROM wop_cat`);
+    return row;
+  }catch (e) {
+    console.error('error', e.message);
+  }
+  // try{
+  //   const [row] = await promisePool.execute('UPDATE wop_cat SET (name, age, weight, owner) VALUES (?, ?, ?, ?)' + `WHERE cat_id = ${catid}`, [cat.name, cat.age, cat.weight, cat.owner]);
+  //   console.log("row inside updatecat", row);
+  //   return row;
+  // }catch (e) {
+  //   console.error('error', e.message);
+  // }
+};
+
 module.exports = {
   getAllCats,
   getAllCatsSort,
   insertCat,
   getCatById,
+  updateCat,
 };
