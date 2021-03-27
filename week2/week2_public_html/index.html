@@ -21,14 +21,17 @@
   <h3>Add Cat</h3>
   <form action="cat" method="post" enctype="multipart/form-data" class="light-border">
     <input class="light-border" type="text" name="name" placeholder="Name" required>
-    <input class="light-border" type="text" name="age" placeholder="Age" required>
-    <input class="light-border" type="text" name="weight" placeholder="Weight" required>
-    <!--
+    <input class="light-border" type="number" name="age" placeholder="Age" required>
+    <input class="light-border" type="number" name="weight" placeholder="Weight" required>
     <input class="light-border" type="text" name="owner"  placeholder="Owner id" required>
-    <input class="light-border" type="file" name="cat">
-    -->
+    <input class="light-border" type="file" name="catpic">
     <button class="light-border" type="submit">Save</button>
   </form>
+  <form action="cat" method="post" enctype="multipart/form-data" class="light-border">
+    <input type="file" name="catpic">
+    <button class="light-border" type="submit">Save</button>
+  </form>
+
 </div>
 <script src="./js/main.js"></script>
 </body>

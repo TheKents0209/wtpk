@@ -2,9 +2,16 @@ const express = require('express');
 const router = express.Router();
 const catController = require('../controllers/catController');
 
+const multer = require('multer');
+const upload = multer({dest: './uploads/'});
+
 router.route('/').
     get(catController.cat_list_get).
-    post(catController.cat_post_new_cat);
+    post(upload.single('catpic'), function(req, res) {
+      console.log(req.file, req.body);
+      catController.cat_post_new_cat(req,res)
+    });
+    //post(catController.cat_post_new_cat);
 
 router.route('/:id').
     get(catController.cat_get_by_id).

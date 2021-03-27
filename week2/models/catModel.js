@@ -31,8 +31,18 @@ const insertCat = async (cat) => {
   return row.insertId;
 };
 
+const getCatById = async (id) => {
+  try{
+    const [row] = await promisePool.query(`SELECT * FROM wop_cat WHERE cat_id = ${id}`);
+    return row;
+  }catch (e) {
+    console.error('error', e.message);
+  }
+};
+
 module.exports = {
   getAllCats,
   getAllCatsSort,
   insertCat,
+  getCatById,
 };

@@ -19,8 +19,9 @@ const cat_list_get = async (req, res) => {
   res.json(cats);
 };
 
-const cat_get_by_id = (req, res) => {
-  res.json(cats.find(cat => cat.id === req.params.id));
+const cat_get_by_id = async (req, res) => {
+  const cat = await catModel.getCatById(req.params.id)
+  res.json(cat);
 };
 
 const cat_post_new_cat = async (req, res) => {
@@ -32,8 +33,13 @@ const cat_post_new_cat = async (req, res) => {
   res.json(cat);
 };
 
+const upload = (req, res) => {
+  console.log(req.file, req.body);
+};
+
 module.exports = {
   cat_list_get,
   cat_get_by_id,
   cat_post_new_cat,
+  upload,
 };
