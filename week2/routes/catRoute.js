@@ -7,22 +7,12 @@ const upload = multer({dest: './uploads/'});
 
 router.route('/').
     get(catController.cat_list_get).
-    post(upload.single('catpic'), function(req, res) {
-      console.log(req.file, req.body);
-      console.log('cat file inside route:', req.file)
-      catController.cat_post_new_cat(req,res)
-    }).
-    put(catController.cat_update_put);
+    post(upload.single('catpic'), catController.cat_post_new_cat);
 
-router.route('/:id').
-    get(catController.cat_get_by_id).
-    put((req, res) => {
-      console.log('put cat', req.params);
-      res.send('put cat');
-    })
-    .delete((req, res) => {
-      console.log('delete cat', req.params);
-      res.send('delete cat');
-     });
+router.route('/:id')
+  .get(catController.cat_get_by_id)
+  .put(catController.cat_put_update_cat)
+  .delete(catController.cat_delete_cat);
+
 
 module.exports = router;

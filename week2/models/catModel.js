@@ -24,41 +24,28 @@ const getAllCatsSort = async (order) => {
   }
 };
 
-const insertCat = async (cat,picture) => {
-  const [row] = await promisePool.execute('INSERT INTO wop_cat (name, age, weight, owner, filename) VALUES (?, ?, ?, ?, ?)', [cat.name, cat.age, cat.weight, cat.owner, picture]);
+const insertCat = async (cat) => {
+  const [row] = await promisePool.execute('INSERT INTO wop_cat (name, age, weight, owner, filename) VALUES (?, ?, ?, ?, ?)', [cat.name, cat.age, cat.weight, cat.owner, cat.filename]);
   console.log('insert row', row);
   return row.insertId;
 };
 
-const getCatById = async (id) => {
-  try{
-    const [row] = await promisePool.query(`SELECT * FROM wop_cat WHERE cat_id = ${id}`);
-    return row;
-  }catch (e) {
-    console.error('error', e.message);
-  }
+const updateCat = async (cat) => {
+  const [row] = await promisePool.execute('UPDATE wop_cat SET name=?, age=?, weight=? WHERE cat_id=?', [cat.name, cat.age, cat.weight, cat.id]);
+  console.log('update row', row);
+  return true;
 };
 
-const updateCat = async (cat, catid) => {
-  try{
-    const [row] = await promisePool.query(`SELECT * FROM wop_cat`);
-    return row;
-  }catch (e) {
-    console.error('error', e.message);
-  }
-  // try{
-  //   const [row] = await promisePool.execute('UPDATE wop_cat SET (name, age, weight, owner) VALUES (?, ?, ?, ?)' + `WHERE cat_id = ${catid}`, [cat.name, cat.age, cat.weight, cat.owner]);
-  //   console.log("row inside updatecat", row);
-  //   return row;
-  // }catch (e) {
-  //   console.error('error', e.message);
-  // }
+const deleteCat = async (id) => {
+  const [row] = await promisePool.execute('DELETE FROM wop_cat WHERE cat_id=?', [id]);
+  console.log('delete row', row);
+  return true;
 };
 
 module.exports = {
   getAllCats,
   getAllCatsSort,
   insertCat,
-  getCatById,
   updateCat,
+  deleteCat,
 };
