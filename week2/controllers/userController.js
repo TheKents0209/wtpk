@@ -1,7 +1,9 @@
-// Controller
 'use strict';
+// userController
 const userModel = require('../models/userModel');
+const {validationResult} = require('express-validator');
 
+const users = userModel.users;
 
 const user_list_get = async (req, res) => {
   const users = await userModel.getAllUsers();
@@ -9,32 +11,32 @@ const user_list_get = async (req, res) => {
 };
 
 const user_get_by_id = async (req, res) => {
-  const user = await userModel.getUserById(req.params.id)
+  console.log('userController: http get user with path param', req.params);
+  const user = await userModel.getUser(req.params.id);
   res.json(user);
+}
+
+const user_create = async (req, res) => {
+  //here we will create a user with data comming from req...
+  console.log('userController user_create', req.body, req.file);
+  const id = await userModel.insertUser(req);
+  const user = await userModel.getUser(id);
+  res.send(user);
+}
+
+const user_update = async (req, res) => {
+  const updateOk = await userModel.updateUser(req.params.id, req);
+  res.send(`updated... ${updateOk}`);
 };
 
-const cat_post_new_cat = async (req, res) => {
-  console.log('post cat', req.body);
-  const cat = req.body;
-  const picture = req.file.destination + req.file.filename;
-  console.log('cat after adding file', cat);
-  console.log('cat file inside controller:', req.file);
-  const catid = await catModel.insertCat(cat,picture);
-  cat.id = catid;
-  // res.send(`post cat: ${req.body.name}`);
-  res.json(cat);
-};
-
-const user_post_new_user = async (req, res) => {
-  console.log('post user', req.body);
-  const user = req.body;
-  const userid = await userModel.insertUser(user);
-  user.id = userid;
-  res.json(user);
+const user_delete = async (req, res) => {
+  res.send('deleted...');
 };
 
 module.exports = {
   user_list_get,
   user_get_by_id,
-  user_post_new_user,
+  user_create,
+  user_update,
+  user_delete
 };

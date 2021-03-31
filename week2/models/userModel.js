@@ -4,40 +4,49 @@ const promisePool = pool.promise();
 
 const getAllUsers = async () => {
   try {
-    const [rows] = await promisePool.query('SELECT user_id, name, email FROM wop_user');
-    console.log('something back from db?', rows);
+    const [rows] = await promisePool.query('SELECT * FROM wop_user');
     return rows;
   } catch (e) {
-    console.error('error', e.message);
+    console.error('userModel:', e.message);
   }
 };
 
-// const insertCat = async (cat,picture) => {
-//   const [row] = await promisePool.execute('INSERT INTO wop_cat (name, age, weight, owner, filename) VALUES (?, ?, ?, ?, ?)', [cat.name, cat.age, cat.weight, cat.owner, picture]);
-//   console.log('insert row', row);
-//   return row.insertId;
-// };
-
-const insertUser = async (user) => {
-  try{
-    const [row] = await promisePool.execute('INSERT INTO wop_user (name, email, password) VALUES (?, ?, ?)', [user.name, user.email, user.passwd]);
-    return row;
-  }catch (e) {
-    console.error('error', e.message);
+const getUser = async (id) => {
+  try {
+    console.log('userModel getUser', id);
+    const [rows] = await promisePool.query('SELECT * FROM wop_user WHERE user_id = ?', [id]);
+    return rows[0];
+  } catch (e) {
+    console.error('userModel:', e.message);
   }
-}
+};
 
-const getUserById = async (id) => {
-  try{
-    const [row] = await promisePool.query(`SELECT user_id, name, email FROM wop_user WHERE user_id = ${id}`);
-    return row;
-  }catch (e) {
-    console.error('error', e.message);
+const insertUser = async (req) => {
+  try {
+    const [rows] = await promisePool.query('INSERT INTO wop_user (name, email, password) VALUES (?, ?, ?);',
+        [req.body.name, req.body.email, req.body.passwd]);
+    console.log('userModel insert:', rows);
+    return rows.insertId;
+  } catch (e) {
+    console.error('userModel insertUser:', e);
+    return 0;
+  }
+};
+
+const updateUser = async (id, req) => {
+  try {
+    const [rows] = await promisePool.query('UPDATE wop_user SET name = ?, email = ?, password = ? WHERE user_id = ?;',
+        [req.body.name, req.body.username, req.body.passwd, id]);
+    console.log('userModel update:', rows);
+    return rows.affectedRows === 1;
+  } catch (e) {
+    return false;
   }
 };
 
 module.exports = {
   getAllUsers,
-  getUserById,
+  getUser,
   insertUser,
+  updateUser
 };
