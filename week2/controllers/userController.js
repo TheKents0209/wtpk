@@ -17,15 +17,22 @@ const user_get_by_id = async (req, res) => {
   res.json(user);
 }
 
-const user_create = async (req, res) => {
+const user_create = async (req, res, next) => {
   //here we will create a user with data comming from req...
   console.log('userController user_create', req.body, req.file);
   //hashing password before insert into database
+  const user = {};
+  user.name = req.body.name;
+  user.username = req.body.username;
   const salt = bcrypt.genSaltSync(12);
-  req.body.password = bcrypt.hashSync(req.body.password, salt);
-  const id = await userModel.insertUser(req);
-  const user = await userModel.getUser(id);
-  res.send(user);
+  user.password = bcrypt.hashSync(req.body.password, salt);
+
+  const id = await userModel.insertUser(user);
+  if(id > 0) {
+    next();
+  } else{
+    res.status(400).json({error: 'register error'});
+  }
 }
 
 const user_update = async (req, res) => {
