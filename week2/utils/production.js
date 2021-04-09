@@ -19,5 +19,5 @@ module.exports = (app, port) => {
     }
   });
 
-  app.listen(port);
+  app.listen(port, () => { console.log(`app listen on port ${port}`)});
 }
